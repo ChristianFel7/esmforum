@@ -23,3 +23,24 @@ test('Testando cadastro de três perguntas', () => {
   expect(perguntas[2].num_respostas).toBe(0);
   expect(perguntas[1].id_pergunta).toBe(perguntas[2].id_pergunta-1);
 });
+
+test('Testando cadastro de pergunta e respostas', () => {
+  modelo.cadastrar_pergunta('Qual a capital da França?');
+  const perguntas = modelo.listar_perguntas();
+  const id_pergunta = perguntas[0].id_pergunta;
+  modelo.cadastrar_resposta(id_pergunta, 'Paris');
+  modelo.cadastrar_resposta(id_pergunta, 'Lyon (acho)');
+
+  const pergunta_atualizada = modelo.obter_pergunta(id_pergunta);
+  expect(pergunta_atualizada.num_respostas).toBe(2);
+  expect(pergunta_atualizada.respostas.length).toBe(2);
+  expect(pergunta_atualizada.respostas[0].texto).toBe('Paris');
+  expect(pergunta_atualizada.respostas[1].texto).toBe('Lyon (acho)');
+
+
+});
+
+test('Testando obter_pergunta com id inexistente', () => {
+  const pergunta = modelo.obter_pergunta(999); // ID inexistente
+  expect(pergunta).toBeNull();
+});
